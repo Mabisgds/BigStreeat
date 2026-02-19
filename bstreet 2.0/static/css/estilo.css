@@ -1,0 +1,113 @@
+:root {
+    --deep-blue: #06192F;
+    --mid-blue: #0A2A4D;
+    --orange-main: #CF561D;
+    --orange-bright: #D9491D;
+    --teal: #1493A6;
+    --bg-body: #f8fafc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background: var(--bg-body);
+    overflow-x: hidden;
+}
+
+/* HEADER */
+header {
+    height: 85px;
+    background: var(--mid-blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: 4px solid var(--orange-main);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.brand-name {
+    color: white;
+    font-weight: 900;
+    font-size: 24px;
+}
+
+/* SIDEBAR */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 900;
+    top: 0;
+    left: 0;
+    background-color: var(--deep-blue);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 100px;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+}
+
+#main-content {
+    transition: all 0.5s ease;
+}
+
+/* FORMULÁRIOS */
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--deep-blue);
+}
+
+.login-container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-group input,
+.form-grid input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    outline: none;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.btn-block {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: var(--orange-main);
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}

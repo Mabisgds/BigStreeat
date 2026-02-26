@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIG STREET - institucional</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../static/css/inst.css">
+</head>
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-item" onclick="navigate('home')"><i class="fas fa-home"></i> Início</div>
+        <div class="sidebar-item" onclick="navigate('search')"><i class="fas fa-search"></i> Pesquisar</div>
+        <div class="sidebar-item" onclick="openCreateModal()"><i class="fas fa-plus-circle"></i> Criar Evento</div>
+    </nav>
+<header>
+    <div class="header-left">
+        <button id="menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <img src="logo.png"
+             alt="BigStreet Logo"
+             class="logo-img"
+             onclick="navigate('home')"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+
+        <div class="logo-text-fallback" onclick="navigate('home')">
+            BIG<span>STREET</span>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <a id="contato_button" href="#">Contato</a>
+        <a href="{{ url_for('login') }}" class="login_button">Login</a>
+<a href="{{ url_for('cadastro') }}" class="cadastro_button">Cadastro</a>
+
+    </div>
+
+    <div class="auth-container" id="authContainer"></div>
+</header>
+
+<main class="container" id="home">
+<section class="hero">
+<h1>BIG STREET</h1>
+<p>O Big Street é um serviço para amantes de todos os esportes</p>
+<p><strong>Missão:</strong> Oferecer um serviço de qualidade para aqueles que desejam organizar ou participar eventos esportivos.</p>
+<a class="cta" href="#servicos">Conheça nossos serviços</a>
+<a class="cta" href="#contato">Entre em contato</a>
+</section>
+<section class="section" id="sobre">
+<div class="card">
+<h2>Quem Somos</h2>
+<p>O BIG STREET é desenvolvido pelo grupo MAGID</p>
+<h3>Integrantes do Grupo MAGID</h3>
+<ul>
+<li><strong>Andrey Rafael:</strong> Desenvolvedor Back-End</li>
+<li><strong>Davi Erick:</strong> Desenvolvedor Back-End</li>
+<li><strong>Gabriel Aveino:</strong> Desenvolvedor Front-End.</li>
+<li><strong>Gabriel Felipe:</strong> Desenvolvedor Front-End.</li>
+<li><strong>Ingrid Kamilly:</strong> Responsável pelo Banco de Dados.</li>
+<li><strong>Maria Gabriela:</strong> Nossa Scrum Master.</li>
+</ul>
+</div>
+</section>
+<section class="section" id="servicos">
+<div class="card">
+<h2>Serviços e Atuação</h2>
+<p>Desenvolvemos atividades voltadas ao atendimento e ao suporte de nossos públicos.</p>
+<div class="services">
+<div class="service">
+<h3>Serviço 1</h3>
+<p>Organização de Eventos Esportivos</p>
+</div>
+<div class="service">
+<h3>Serviço 2</h3>
+<p>Rede Social para Esportes</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section" id="contato">
+<div class="card">
+<h2>Contato</h2>
+<p><strong>Email:</strong> magidbigstreet@empresa.com</p>
+<form>
+<div class="form-group">
+<label>Nome</label>
+<input class="input" type="text" placeholder="Seu nome">
+</div>
+<div class="form-group">
+<label>Email</label>
+<input class="input" type="email" placeholder="Seu email">
+</div>
+<div class="form-group">
+<label>Mensagem</label>
+<textarea placeholder="Digite sua mensagem"></textarea>
+</div>
+<button class="cta" type="submit">Enviar mensagem</button>
+</form>
+</div>
+</section>
+<div class="footer">© 2026 MAGID • Todos os direitos reservados</div>
+</main>
+<div id="message-container"></div>
+
+<script src="{{ url_for('static', filename='js/mensagens.js') }}"></script>
+</body>
+</html>

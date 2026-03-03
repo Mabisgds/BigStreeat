@@ -234,6 +234,18 @@ def criar_evento():
                 "success": False,
                 "message": "Data e horários são obrigatórios"
             }), 400
+    except Exception as e:
+        print("ERRO NO BANCO:", str(e))
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 400
+
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
 
         try:
             horario_inicio_final = datetime.strptime(
@@ -299,20 +311,37 @@ def criar_evento():
         cursor.execute(sql, valores)
         db.commit()
         
-        return jsonify({
-            "success": True,
-            "message": "Evento criado!",
-            "evento_id": cursor.lastrowid
-        }), 201
+        try:
+            cursor.execute(sql, valores)
+            db.commit()
 
-    except Exception as e:
-        print("ERRO NO BANCO:", str(e)) # Isso vai aparecer no seu terminal do VS Code
-        return jsonify({"success": False, "message": str(e)}), 400
-    finally:
-        cursor.close()
-        db.close()
-    return jsonify(quadras)
+            evento_id = cursor.lastrowid
 
+            link_evento = f"http://localhost:5000/evento/{evento_id}"
+
+            qr_code_url = (
+                "https://api.qrserver.com/v1/create-qr-code/"
+                f"?size=250x250&data={link_evento}"
+            )
+
+            return jsonify({
+                "success": True,
+                "message": "Evento criado!",
+                "evento_id": evento_id,
+                "link_evento": link_evento,
+                "qr_code_url": qr_code_url
+            }), 201
+
+        except Exception as e:
+            print("ERRO NO BANCO:", str(e))
+            return jsonify({
+                "success": False,
+                "message": str(e)
+            }), 400
+
+        finally:
+            cursor.close()
+            db.close()
 
     # ---------------- QUADRAS ---------------- #
 @app.route('/quadra', methods=['POST'])
@@ -379,6 +408,22 @@ def criar_quadras():
 
 
 # ---------------- MAIN ---------------- #
+
+@app.route('/evento/<int:evento_id>', methods=['GET'])
+def visualizar_evento(evento_id):
+    db = conectar_banco()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM eventos WHERE id_evento = %s", (evento_id,))
+    evento = cursor.fetchone()
+
+    cursor.close()
+    db.close()
+
+    if not evento:
+        return jsonify({"erro": "Evento não encontrado"}), 404
+
+    return render_template("evento_detalhe.html", evento=evento)
 
 if __name__ == '__main__':
     app.run(debug=True)

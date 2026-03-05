@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Primeiro QR Code</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input { padding: 10px; font-size: 16px; width: 300px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+        img { margin-top: 20px; border: 1px solid #ccc; padding: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>Gerador de QR Code</h1>
+    <p>Digite um texto ou site abaixo para gerar seu QR Code:</p>
+
+    <input type="text" id="texto-aluno" placeholder="Ex: https://www.google.com"&gt;
+   
+    <button onclick="gerarQRCode()">Gerar QR Code</button>
+
+    <br>
+
+    <img id="imagem-qr" src="" alt="Seu QR Code aparecerá aqui">
+
+    <script>
+        // Esta é a função que conversa com a API
+        function gerarQRCode() {
+            // 1. Pegamos o texto que o aluno digitou
+            let texto = document.getElementById('texto-aluno').value;
+           
+            // 2. Montamos a URL da API juntando com o texto
+            let urlApi = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=&quot; + texto;
+           
+            // 3. Dizemos para a tag de imagem carregar essa URL
+            let imagem = document.getElementById('imagem-qr');
+            imagem.src = urlApi;
+            imagem.style.display = "inline"; // Torna a imagem visível
+        }
+    </script>
+
+</body>
+</html>

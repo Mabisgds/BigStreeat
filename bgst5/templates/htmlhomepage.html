@@ -472,7 +472,15 @@ Jogador de final de semana, gosto de competitividade.
             </div>
             <div class="modal-body-scrollable">
                 <form id="mainEventForm">
-                    <div class="form-section-block">
+                    <div id="qr-success-layout" style="display: none; text-align: center; padding: 20px;">
+                        <h2 style="color: #2ecc71;">ARENA PUBLICADA!</h2>
+                        <div class="qr-frame" style="background: white; padding: 10px; display: inline-block; border-radius: 10px;">
+                            <img id="imagem-qr-acesso" src="" style="width: 200px;">
+                        </div>
+                        <p id="linkTexto" style="color: var(--orange-glow); font-size: 12px;"></p>
+                        <button class="btn-modal-submit" onclick="window.location.reload()">Concluir</button>
+                    </div>
+                                        <div class="form-section-block">
                         <div class="block-label"><i class="fas fa-info-circle"></i> Informações do Evento</div>
                         <div class="form-row-double">
                             <div class="form-group">
@@ -503,7 +511,11 @@ Jogador de final de semana, gosto de competitividade.
                                 </select>
                             </div>
                         </div>
-                         <div class="form-row-double">
+                          <div class="form-row-double">
+                            <div class="form-group">
+                                <label>Data</label>
+                                <input type="date" id="sql_data"  name="data_evento" required>
+                            </div>
                             <div class="form-group">
                                 <label>Horário de Início</label>
                                 <input type="time" id="sql_inicio" required>
@@ -532,6 +544,18 @@ Jogador de final de semana, gosto de competitividade.
                     </div>
                     <div class="form-section-block">
                         <div class="block-label"><i class="fas fa-map-marker-alt"></i> Localização (Tabela Quadra)</div>
+
+                    <div class = "form-row-double">
+
+                        <div class="form-group">
+                            <label>CEP</label>
+                            <input type="text" id="sql_cep" placeholder="00000-000">
+                        </div>
+                        <div class ="form-group">
+                            <label>Numero</label>
+                            <input type = "text" id= "sql_numero" placeholder="2359">
+                         </div>
+                        </div>
                         <div class="form-row-triple">
                             <div class="form-group">
                                 <label>Cidade</label>
@@ -547,14 +571,11 @@ Jogador de final de semana, gosto de competitividade.
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Rua e Número</label>
+                            <label>Rua</label>
                             <input type="text" id="sql_rua" placeholder="Rua das Olimpíadas, 123">
                         </div>
-                        <div class="form-group">
-                            <label>CEP</label>
-                            <input type="text" id="sql_cep" placeholder="00000-000">
-                        </div>
-                    </div>
+
+
                     <div class="form-section-block">
                         <div class="block-label"><i class="fas fa-coins"></i> Gestão Financeira</div>
                         <div class="form-row-triple">

@@ -151,17 +151,17 @@ const engine = (function () {
     const _renderOwned = () => {
 
         const _renderQuadras = () => {
-    const grid = document.getElementById('quadrasGrid');
-    if (!grid) return;
+            const grid = document.getElementById('quadrasGrid');
+            if (!grid) return;
 
-    grid.innerHTML = _courts.map(c => `
+            grid.innerHTML = _courts.map(c => `
         <div class="court-card">
             <h3>${c.nome}</h3>
             <p>${c.bairro}, ${c.cidade}</p>
             <p>Capacidade: ${c.capacidade} jogadores</p>
         </div>
     `).join('');
-};
+        };
 
         const container = document.getElementById('ownedEventsList');
         if (!container) return;
@@ -175,7 +175,7 @@ const engine = (function () {
         _renderHistory();
         _renderOwned();
         _renderQuadras();
-    };  
+    };
 
     // --------------------
     // LÓGICA DE NEGÓCIO
@@ -334,131 +334,131 @@ const engine = (function () {
     const _setupDOMListeners = () => {
         const courtCep = document.getElementById('court_cep');
         if (courtCep) {
-    courtCep.addEventListener('blur', async (e) => {
-        const cep = e.target.value.replace(/\D/g, '');
-        if (cep.length !== 8) return;
+            courtCep.addEventListener('blur', async (e) => {
+                const cep = e.target.value.replace(/\D/g, '');
+                if (cep.length !== 8) return;
 
-        try {
-            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data = await response.json();
+                try {
+                    const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                    const data = await response.json();
 
-            if (!data.erro) {
-                document.getElementById('court_rua').value = data.logradouro || "";
-                document.getElementById('court_bairro').value = data.bairro || "";
-                document.getElementById('court_cidade').value = data.localidade || "";
-                document.getElementById('court_estado').value = data.uf || "";
-            }
-        } catch (err) {
-            _showToast("Erro ao buscar CEP da quadra.");
+                    if (!data.erro) {
+                        document.getElementById('court_rua').value = data.logradouro || "";
+                        document.getElementById('court_bairro').value = data.bairro || "";
+                        document.getElementById('court_cidade').value = data.localidade || "";
+                        document.getElementById('court_estado').value = data.uf || "";
+                    }
+                } catch (err) {
+                    _showToast("Erro ao buscar CEP da quadra.");
+                }
+            });
         }
-    });
-}
         if (document.getElementById('triggerCreateCourtModal'))
-    document.getElementById('triggerCreateCourtModal').onclick =
-        () => _openModal('createCourtModal');
+            document.getElementById('triggerCreateCourtModal').onclick =
+                () => _openModal('createCourtModal');
 
         if (document.getElementById('closeCreateCourtModal'))
-    document.getElementById('closeCreateCourtModal').onclick =
-        () => _closeModal('createCourtModal');
+            document.getElementById('closeCreateCourtModal').onclick =
+                () => _closeModal('createCourtModal');
 
-    if (document.getElementById('cancelCourtBtn'))
-    document.getElementById('cancelCourtBtn').onclick =
-        () => _closeModal('createCourtModal');
+        if (document.getElementById('cancelCourtBtn'))
+            document.getElementById('cancelCourtBtn').onclick =
+                () => _closeModal('createCourtModal');
         document.getElementById('saveCourtBtn').onclick = async () => {
-document.getElementById('saveCourtBtn').onclick = async () => {
-    // Coleta dos dados garantindo que nenhum campo seja undefined
-    const formData = {
-        nome_quadra: document.getElementById('court_nome').value,
-        rua_quadra: document.getElementById('court_rua').value,
-        numero_quadra: document.getElementById('court_numero').value,
-        cidade_quadra: document.getElementById('court_cidade').value,
-        bairro_quadra: document.getElementById('court_bairro').value,
-        cep_quadra: document.getElementById('court_cep').value,
-        estado_quadra: document.getElementById('court_estado').value,
-        superficie: document.getElementById('court_superficie').value,
-        esporte_quadra: document.getElementById('court_esporte').value,
-        capacidade: parseInt(document.getElementById('court_capacidade').value)
-    };
+            document.getElementById('saveCourtBtn').onclick = async () => {
+                // Coleta dos dados garantindo que nenhum campo seja undefined
+                const formData = {
+                    nome_quadra: document.getElementById('court_nome').value,
+                    rua_quadra: document.getElementById('court_rua').value,
+                    numero_quadra: document.getElementById('court_numero').value,
+                    cidade_quadra: document.getElementById('court_cidade').value,
+                    bairro_quadra: document.getElementById('court_bairro').value,
+                    cep_quadra: document.getElementById('court_cep').value,
+                    estado_quadra: document.getElementById('court_estado').value,
+                    superficie: document.getElementById('court_superficie').value,
+                    esporte_quadra: document.getElementById('court_esporte').value,
+                    capacidade: parseInt(document.getElementById('court_capacidade').value)
+                };
 
-    try {
-        const response = await fetch("http://127.0.0.1:5000/quadra", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: 'include', // Essencial para a sessão funcionar
-            body: JSON.stringify(formData)
-        });
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/quadra", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: 'include', // Essencial para a sessão funcionar
+                        body: JSON.stringify(formData)
+                    });
 
-        const resultado = await response.json();
+                    const resultado = await response.json();
 
-        if (resultado.success) {
-            _showToast("Quadra criado com sucesso!");
+                    if (resultado.success) {
+                        _showToast("Quadra criado com sucesso!");
 
-            // Criar o objeto para a interface aparecer na hora
-            const newQr = { 
-                id: resultado.id_quadra || Date.now(), 
-                nome: formData.nome_quadra, 
-                esporte: formData.esporte_quadra,
-                cidade: formData.cidade_quadra,
-                bairro: formData.bairro_quadra,
-            };
-            
-            // Injeta no estado e redesenha a tela
-            _state.events.unshift(newQr); 
-            _renderAll(); 
-            _closeModal('createModal');
-        } else {
-            _showToast("Erro: " + resultado.message);
-        }
-    } catch (erro) {
-        console.error("Erro na requisição:", erro);
-        _showToast("Erro de conexão com o servidor.");
-    }
-    }
-    
+                        // Criar o objeto para a interface aparecer na hora
+                        const newQr = {
+                            id: resultado.id_quadra || Date.now(),
+                            nome: formData.nome_quadra,
+                            esporte: formData.esporte_quadra,
+                            cidade: formData.cidade_quadra,
+                            bairro: formData.bairro_quadra,
+                        };
 
-    if (!formData.nome) {
-        _showToast("Informe o nome da quadra.");
-        return;
-    }
-    const navExploreCourts = document.getElementById("navExploreCourts");
+                        // Injeta no estado e redesenha a tela
+                        _state.events.unshift(newQr);
+                        _renderAll();
+                        _closeModal('createModal');
+                    } else {
+                        _showToast("Erro: " + resultado.message);
+                    }
+                } catch (erro) {
+                    console.error("Erro na requisição:", erro);
+                    _showToast("Erro de conexão com o servidor.");
+                }
+            }
 
-if (navExploreCourts) {
-    navExploreCourts.addEventListener("click", () => {
 
-        // Esconde todas as sections
-        document.querySelectorAll(".content-section").forEach(sec => {
-            sec.style.display = "none";
-        });
+            if (!formData.nome) {
+                _showToast("Informe o nome da quadra.");
+                return;
+            }
+            const navExploreCourts = document.getElementById("navExploreCourts");
 
-        // Mostra a seção de quadras
-        document.getElementById("exploreCourtsSection").style.display = "block";
+            if (navExploreCourts) {
+                navExploreCourts.addEventListener("click", () => {
 
-        carregarQuadras();
-    });
-}
+                    // Esconde todas as sections
+                    document.querySelectorAll(".content-section").forEach(sec => {
+                        sec.style.display = "none";
+                    });
 
-    try {
+                    // Mostra a seção de quadras
+                    document.getElementById("exploreCourtsSection").style.display = "block";
 
-        const response = await fetch("http://127.0.0.1:5000/quadra", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: 'include',
-            body: JSON.stringify(formData)
-        });
+                    carregarQuadras();
+                });
+            }
 
-        const result = await response.json();
+            try {
 
-        if (result.success) {
-            _showToast("Quadra cadastrada com sucesso!");
-            _closeModal('createCourtModal');
-        } else {
-            _showToast("Erro: " + result.message);
-        }
+                const response = await fetch("http://127.0.0.1:5000/quadra", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: 'include',
+                    body: JSON.stringify(formData)
+                });
 
-    } catch (error) {
-        _showToast("Erro ao registrar quadra.");
-    }
-};
+                const result = await response.json();
+
+                if (result.success) {
+                    _showToast("Quadra cadastrada com sucesso!");
+                    _closeModal('createCourtModal');
+                } else {
+                    _showToast("Erro: " + result.message);
+                }
+
+            } catch (error) {
+                _showToast("Erro ao registrar quadra.");
+            }
+        };
         // Dentro de _setupDOMListeners:
         const cepInput = document.getElementById('sql_cep');
         if (cepInput) {
@@ -498,68 +498,68 @@ if (navExploreCourts) {
         const search = document.getElementById('masterSearch');
         if (search) search.oninput = (e) => { _state.searchQuery = e.target.value; _renderExplore(); };
 
-      // Dentro de _setupDOMListeners no javahomepage.js
-document.getElementById('saveEventBtn').onclick = async () => {
-    // Coleta dos dados garantindo que nenhum campo seja undefined
-    const formData = {
-        nome_evento: document.getElementById('sql_nome')?.value || "Evento Arena",
-        esporte_evento: document.getElementById('sql_esporte')?.value || "Futebol",
-        cidade_evento: document.getElementById('sql_cidade')?.value || "",
-        numero_evento: document.getElementById('sql_numero')?.value || "",
-        rua_evento: document.getElementById('sql_rua')?.value || "",
-        bairro_evento: document.getElementById('sql_bairro')?.value || "",
-        data_evento: document.getElementById('sql_data')?.value || "",
-        horario_inicio: document.getElementById('sql_inicio')?.value || "",
-        horario_termino: document.getElementById('sql_fim')?.value || "",
-        descricao_evento: document.getElementById('sql_desc')?.value || "",
-        valor_aluguel: document.getElementById('sql_valor')?.value || 0,
-        pix: document.getElementById('sql_pix')?.value || "",
-        bnco: document.getElementById('sql_banco')?.value || "",
-        max_vagas: document.getElementById('sql_max')?.value || 10,
-        tipo: document.getElementById('sql_quadra')?.value,
-        quadra_id: 1     // ID padrão para teste
+        // Dentro de _setupDOMListeners no javahomepage.js
+        document.getElementById('saveEventBtn').onclick = async () => {
+            // Coleta dos dados garantindo que nenhum campo seja undefined
+            const formData = {
+                nome_evento: document.getElementById('sql_nome')?.value || "Evento Arena",
+                esporte_evento: document.getElementById('sql_esporte')?.value || "Futebol",
+                cidade_evento: document.getElementById('sql_cidade')?.value || "",
+                numero_evento: document.getElementById('sql_numero')?.value || "",
+                rua_evento: document.getElementById('sql_rua')?.value || "",
+                bairro_evento: document.getElementById('sql_bairro')?.value || "",
+                data_evento: document.getElementById('sql_data')?.value || "",
+                horario_inicio: document.getElementById('sql_inicio')?.value || "",
+                horario_termino: document.getElementById('sql_fim')?.value || "",
+                descricao_evento: document.getElementById('sql_desc')?.value || "",
+                valor_aluguel: document.getElementById('sql_valor')?.value || 0,
+                pix: document.getElementById('sql_pix')?.value || "",
+                bnco: document.getElementById('sql_banco')?.value || "",
+                max_vagas: document.getElementById('sql_max')?.value || 10,
+                tipo: document.getElementById('sql_quadra')?.value,
+                quadra_id: 1     // ID padrão para teste
+            };
+
+            try {
+                const response = await fetch("http://127.0.0.1:5000/eventos", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: 'include', // Essencial para a sessão funcionar
+                    body: JSON.stringify(formData)
+                });
+
+                const resultado = await response.json();
+
+                if (resultado.success) {
+                    _showToast("Evento criado com sucesso!");
+
+                    // Criar o objeto para a interface aparecer na hora
+                    const newEv = {
+                        id: resultado.evento_id || Date.now(),
+                        nome: formData.nome_evento,
+                        data: formData.data_evento,
+                        esporte: formData.esporte_evento,
+                        cidade: formData.cidade_evento,
+                        bairro: formData.bairro_evento,
+                        ocupadas: 1,
+                        max: parseInt(formData.max_vagas) || 10
+                    };
+
+                    // Injeta no estado e redesenha a tela
+                    _state.events.unshift(newEv);
+                    _renderAll();
+                    _closeModal('createModal');
+                } else {
+                    _showToast("Erro: " + resultado.message);
+                }
+            } catch (erro) {
+                console.error("Erro na requisição:", erro);
+                _showToast("Erro de conexão com o servidor.");
+            }
+        }
     };
 
-    try {
-        const response = await fetch("http://127.0.0.1:5000/eventos", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: 'include', // Essencial para a sessão funcionar
-            body: JSON.stringify(formData)
-        });
-
-        const resultado = await response.json();
-
-        if (resultado.success) {
-            _showToast("Evento criado com sucesso!");
-
-            // Criar o objeto para a interface aparecer na hora
-            const newEv = { 
-                id: resultado.evento_id || Date.now(), 
-                nome: formData.nome_evento, 
-                data: formData.data_evento,
-                esporte: formData.esporte_evento,
-                cidade: formData.cidade_evento,
-                bairro: formData.bairro_evento,
-                ocupadas: 1,
-                max: parseInt(formData.max_vagas) || 10
-            };
-            
-            // Injeta no estado e redesenha a tela
-            _state.events.unshift(newEv); 
-            _renderAll(); 
-            _closeModal('createModal');
-        } else {
-            _showToast("Erro: " + resultado.message);
-        }
-    } catch (erro) {
-        console.error("Erro na requisição:", erro);
-        _showToast("Erro de conexão com o servidor.");
-    }
-    }
-};
-
-// --------------------
+    // --------------------
     // EXPOSIÇÃO DO MÓDULO
     // --------------------
     return {
@@ -584,3 +584,20 @@ document.getElementById('saveEventBtn').onclick = async () => {
 // INICIALIZAÇÃO ÚNICA
 // --------------------
 window.addEventListener('DOMContentLoaded', () => engine.init());
+
+function mostrarSucessoComQR(idEvento) {
+    const form = document.getElementById('mainEventForm');
+    const success = document.getElementById('qr-success-layout');
+    const qrImg = document.getElementById('imagem-qr-acesso');
+
+    // Gera o link (caminho)
+    const link = window.location.origin + "/evento/" + idEvento;
+
+    // Alimenta a API de QR Code
+    qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(link);
+    document.getElementById('linkTexto').innerText = link;
+
+    // A MÁGICA: Esconde o formulário e mostra o sucesso
+    form.style.display = 'none';
+    success.style.display = 'block';
+}

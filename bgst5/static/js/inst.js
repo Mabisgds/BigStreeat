@@ -13,7 +13,7 @@ function fecharModal() {
     document.getElementById('modal-equipe').style.display = 'none';
 }
 
-window.onclick = function(event) {
+window.onclick = function (event) {
     let modal = document.getElementById('modal-equipe');
     if (event.target == modal) {
         modal.style.display = 'none';
